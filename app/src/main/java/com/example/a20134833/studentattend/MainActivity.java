@@ -13,15 +13,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText ET_id, ET_pw, ET_phone;
     Button B_signup, B_signin;
+    RadioButton Bs, Bp;
+    RadioGroup radiogroup;
+    boolean status = false; // false = 학생, true = 교수
 
     public static Activity MainAct;
     public static Context MainActContext;
     public static SignIn signin = new SignIn();
+    public static profSignIn profSignIn = new profSignIn();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +41,16 @@ public class MainActivity extends AppCompatActivity {
         TelephonyManager tMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         String mPhoneNumber = (tMgr.getLine1Number() == "" ? tMgr.getLine1Number() : "01001010101");   // if null -> test
         Log.e("확인용", mPhoneNumber);
+
+        Bs = findViewById(R.id.radio_student);
+        Bp = findViewById(R.id.radio_profess);
+        Bs.setChecked(true);
+
+        radiogroup = findViewById(R.id.radioGroup);
 
         ET_id = findViewById(R.id.ET_id);
         ET_pw = findViewById(R.id.ET_pw);
@@ -51,6 +58,24 @@ public class MainActivity extends AppCompatActivity {
         ET_phone.setText(mPhoneNumber);
         ET_phone.setFocusable(false);
         ET_phone.setClickable(false);
+
+        radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId)  {
+                    case R.id.radio_student:
+                        Toast.makeText(MainActivity.this, "학생용으로 선택하셨습니다.", Toast.LENGTH_SHORT).show();
+                        status = false;
+                        ET_id.setHint("8자리 학번 입력");
+                        break;
+                    case R.id.radio_profess:
+                        Toast.makeText(MainActivity.this, "교수용으로 선택하셨습니다.", Toast.LENGTH_SHORT).show();
+                        status = true;
+                        ET_id.setHint("6자리 교번 입력");
+                        break;
+                }
+            }
+        });
 
         B_signup = findViewById(R.id.B_SignUP);
         B_signup.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +96,12 @@ public class MainActivity extends AppCompatActivity {
                                             String pw = ET_pw.getText().toString();
                                             String phone = ET_phone.getText().toString();
                                             Log.e("SignIn Value = ", ET_id.getText().toString() + ET_pw.getText().toString() + ET_phone.getText().toString());
-                                            signin.signin_Asycn(id, pw, phone);
+                                            if(!status) {
+                                                signin.signin_Asycn(id, pw, phone);
+                                            }   else    {
+                                                profSignIn.profSignIn_Asycn(id, pw, phone);
+                                            }
+
                                         }
                                     }
         );

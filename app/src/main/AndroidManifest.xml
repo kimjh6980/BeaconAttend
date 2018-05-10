@@ -25,7 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".BeaconReceive" />
-        <activity android:name=".BeaconList"></activity>
+        <activity android:name=".BeaconList" />
+        <activity android:name=".BeaconTransmitter"></activity>
     </application>
 
 </manifest>
