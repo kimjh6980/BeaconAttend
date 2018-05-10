@@ -2,6 +2,8 @@ package com.example.a20134833.studentattend;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -82,13 +84,23 @@ public class profAddday {
 
                 @Override
                 public void onResponse(Call call, Response response) {
+                    String msg = null;
                     try {
                         responseBody = response.body().string();
-                        if(requestBody.equals("Success"))   {
-                            Toast.makeText(beacontransmitterContext, "생성되었습니다.", Toast.LENGTH_SHORT).show();
+                        if(responseBody.equals("Success"))   {
+                            msg = "생성되었습니다.";
                         }   else    {
-                            Toast.makeText(beacontransmitterContext, "Error : \n" + requestBody, Toast.LENGTH_SHORT).show();
+                            msg = "Error :\n" + responseBody;
                         }
+                        Handler mHandler = new Handler(Looper.getMainLooper());
+                        final String finalMsg = msg;
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 내용
+                                Toast.makeText(beacontransmitterContext, finalMsg, Toast.LENGTH_SHORT).show();
+                            }
+                        }, 0);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

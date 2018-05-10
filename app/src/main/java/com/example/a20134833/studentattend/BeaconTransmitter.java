@@ -199,10 +199,13 @@ public class BeaconTransmitter extends AppCompatActivity {
 
         String id2 = t1.getText().toString();
         String id3 = t2.getText().toString();
+        String temp = t3.getText().toString();
         int dayy = Integer.valueOf(t3.getText().toString());
 
+        // -----------------------------------------------------------------------------------------------------------------------Start 와 End를 구분짓는 datafield가 하나 더 필요할듯
+
         Long[] day = {Long.valueOf(dayy)};
-        if (!statusbool) {   // false = 꺼진상태 -> 켜야됨
+        if (!statusbool && id2 != "" && id3 != "" ) {   // false = 꺼진상태 -> 켜야됨
             // 비콘 생성 후 시작. 실제 가장 필요한 소스
             beacon = new Beacon.Builder()
                     .setId1(uuid)  // uuid for beacon
@@ -238,6 +241,7 @@ public class BeaconTransmitter extends AppCompatActivity {
                     super.onStartSuccess(settingsInEffect);
                     Log.d(TAG, "onStartSuccess: ");
                     statusbool = true;
+                    button.setText("출석중~~");
                 }
 
                 @Override
@@ -247,8 +251,10 @@ public class BeaconTransmitter extends AppCompatActivity {
                 }
             });
         } else    {   // true = 켜진상태 -> 꺼야됨
+            Log.d(TAG, "onStopSuccess");
             beaconTransmitter.stopAdvertising();
             statusbool = false;
+            button.setText("출석시작!");
         }
 
     }
@@ -289,7 +295,7 @@ public class BeaconTransmitter extends AppCompatActivity {
             adddayv = "E"+adddayv;
         }
         Toast.makeText(beacontransmitterContext, classnum +"/"+adddayv, Toast.LENGTH_SHORT).show();
-        //addday.profAddday_Asycn(classnum, adddayv);
+        addday.profAddday_Asycn(classnum, adddayv);
     }
 
     //------------------------------------------
