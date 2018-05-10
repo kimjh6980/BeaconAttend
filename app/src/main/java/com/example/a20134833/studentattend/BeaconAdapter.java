@@ -1,9 +1,14 @@
 package com.example.a20134833.studentattend;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.a20134833.studentattend.databinding.ActivityBeaconListBinding;
 
@@ -13,11 +18,13 @@ import java.util.Vector;
  * Created by 20134833 on 2018-05-05.
  */
 
-class BeaconAdapter extends RecyclerView.Adapter {
+public class BeaconAdapter extends RecyclerView.Adapter {
 
     private Vector<Item> items;
-    private Context context;
+    public Context context;
 
+    BeaconReceive BR = new BeaconReceive();
+    public static AttendReq Areq = new AttendReq();
 
     BeaconAdapter(Vector<Item> items, Context context) {
         this.items = items;
@@ -32,19 +39,49 @@ class BeaconAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        final ActivityBeaconListBinding binding;
         try {
             ItemHolders itemViewHolder = (ItemHolders) holder;
-            final ActivityBeaconListBinding binding = itemViewHolder.binding;
-            binding.TM.setText(""+items.get(position).getM()+"반");
-            binding.TN.setText(""+items.get(position).getN()+"분반");
+            binding = itemViewHolder.binding;
+            binding.TM.setText(""+items.get(position).getM());
+            binding.TN.setText(""+items.get(position).getN());
             String dayS = items.get(position).getD();
             dayS = dayS.replaceAll("\\[", "");
             dayS = dayS.replaceAll("\\]", "");
             binding.TDay.setText(dayS);
             binding.TDistance.setText(items.get(position).getL()+"");
+
+            // 여기가 리스트에서 클릭하는거
+            binding.ImageAttend.setOnClickListener(new View.OnClickListener()    {
+                @Override
+                public void onClick(View v) {
+                    showdialog(BR.userid, binding.TM.getText().toString(), binding.TN.getText().toString(), binding.TDay.getText().toString());
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    void showdialog(final String id, final String m, final String n, final String d)   {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(m + " - " + n);
+        builder.setMessage(d + " 일자 출석");
+        builder.setPositiveButton("예",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //BR.StopBLE2();
+                        Areq.AttendReq_Asycn(id, m, n, d);
+                        Log.i("BeaconAdapter - ", id+"/"+m+"/"+n+"/"+d);
+                    }
+                });
+        builder.setNegativeButton("아니오",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(context,"아니오를 선택했습니다.",Toast.LENGTH_LONG).show();
+                    }
+                });
+        builder.show();
     }
 
     @Override
@@ -61,4 +98,6 @@ class BeaconAdapter extends RecyclerView.Adapter {
             this.binding = binding;
         }
     }
+
+
 }

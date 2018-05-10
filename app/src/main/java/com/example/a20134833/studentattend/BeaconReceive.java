@@ -1,6 +1,7 @@
 package com.example.a20134833.studentattend;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -27,7 +28,10 @@ import java.util.List;
 import java.util.Vector;
 
 public class BeaconReceive extends BaseActivity implements BeaconConsumer {
-    private static final String BEACON_PARSER = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-27";
+
+    public static Context BeaconReceiveContext;
+
+        private static final String BEACON_PARSER = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-27";
 
     private DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
@@ -47,14 +51,18 @@ public class BeaconReceive extends BaseActivity implements BeaconConsumer {
 
     LinearLayoutManager manager;
 
+    static String userid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_beacon_receive);
 
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
-        binding.UserID.setText("접속 ID : " + id);
+        userid = intent.getStringExtra("id");
+        binding.UserID.setText("접속 ID : " + userid);
+
+        BeaconReceiveContext = this;
 
         AndroidModel am = AndroidModel.forThisDevice();
         Log.d("getManufacturer()",am.getManufacturer());
@@ -79,10 +87,11 @@ public class BeaconReceive extends BaseActivity implements BeaconConsumer {
             }
         });
         manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
     }
 
-    private void StopBLE()  {
+
+
+    public void StopBLE()  {
         binding.ScanBtn.setText("Start Search!");
         Log.i(TAG, "Stop BLE Scanning...");
         mBeaconManager.unbind(BeaconReceive.this);
@@ -92,6 +101,11 @@ public class BeaconReceive extends BaseActivity implements BeaconConsumer {
         Log.i(TAG, "Start BLE Scanning...");
         mBeaconManager.bind(BeaconReceive.this);
     }
+    public void StopBLE2()  {
+        Log.i(TAG, "Stop BLE Scanning...");
+        mBeaconManager.unbind(BeaconReceive.this);
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -143,7 +157,7 @@ public class BeaconReceive extends BaseActivity implements BeaconConsumer {
                         });
                         try {
                             Log.e("BeaconReceive", "Sleep 5000");
-                            Thread.sleep(5000);
+                            Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             Log.e("BeaconReceive", "Sleep Error");
                             e.printStackTrace();
@@ -181,4 +195,6 @@ public class BeaconReceive extends BaseActivity implements BeaconConsumer {
             e.printStackTrace();
         }
     }
+
+
 }
