@@ -49,13 +49,14 @@ public class BeaconAdapter extends RecyclerView.Adapter {
             dayS = dayS.replaceAll("\\[", "");
             dayS = dayS.replaceAll("\\]", "");
             binding.TDay.setText(dayS);
-            binding.TDistance.setText(items.get(position).getL()+"");
+            binding.TDistance.setText(items.get(position).getL()+"");   // distance 를 출석상태로 바꿈
 
             // 여기가 리스트에서 클릭하는거
             binding.ImageAttend.setOnClickListener(new View.OnClickListener()    {
                 @Override
                 public void onClick(View v) {
-                    showdialog(BR.userid, binding.TM.getText().toString(), binding.TN.getText().toString(), binding.TDay.getText().toString());
+                    String temp = binding.TDistance.getText().toString();
+                    showdialog(BR.userid, binding.TM.getText().toString(), binding.TN.getText().toString(), binding.TDay.getText().toString(), temp);
                 }
             });
         } catch (Exception e) {
@@ -63,16 +64,23 @@ public class BeaconAdapter extends RecyclerView.Adapter {
         }
     }
 
-    void showdialog(final String id, final String m, final String n, final String d)   {
+    void showdialog(final String id, final String m, final String n, final String d, final String s)   {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(m + " - " + n);
-        builder.setMessage(d + " 일자 출석");
+        builder.setMessage(d + " 일자 " + s);
         builder.setPositiveButton("예",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //BR.StopBLE2();
-                        Areq.AttendReq_Asycn(id, m, n, d);
-                        Log.i("BeaconAdapter - ", id+"/"+m+"/"+n+"/"+d);
+                        String temp = null;
+                        if(s.equals("시작"))   {
+                            temp = "S";
+                        }   else    {
+                            temp = "E";
+                        }
+                        String day = temp + d;
+                        Areq.AttendReq_Asycn(id, m, n, day);
+                        Log.i("BeaconAdapter - ", id+"/"+m+"/"+n+"/"+day);
                     }
                 });
         builder.setNegativeButton("아니오",

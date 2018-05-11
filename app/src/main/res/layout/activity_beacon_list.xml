@@ -42,7 +42,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="44dp"
                 android:gravity="center"
                 android:text="강의교번"
                 android:textSize="20sp" />
@@ -76,7 +76,7 @@
             <TextView
                 android:id="@+id/T_Day"
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
+                android:layout_height="66dp"
                 android:gravity="center"
                 android:text="180101"
                 android:textSize="24sp" />
@@ -97,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:gravity="center"
-                android:text="수신거리"
+                android:text="출석조건"
                 android:textSize="16sp" />
 
             <TextView

@@ -26,7 +26,8 @@
         </activity>
         <activity android:name=".BeaconReceive" />
         <activity android:name=".BeaconList" />
-        <activity android:name=".BeaconTransmitter"></activity>
+        <activity android:name=".BeaconTransmitter" />
+        <activity android:name=".AddclassDialog"></activity>
     </application>
 
 </manifest>

@@ -22,30 +22,33 @@ import static com.example.a20134833.studentattend.BeaconTransmitter.beacontransm
  * Created by 20134833 on 2018-05-10.
  */
 
-public class profAddday {
-    public static final String url = "http://117.16.23.140/beaconattend/addDay.php";
+public class profAddclass {
+    public static final String url = "http://117.16.23.140/beaconattend/Addclass.php";
     OkHttpClient client = new OkHttpClient();
     public static String responseBody = null;
     private static Context context;
     private int error_message = 0;
     public static MainActivity mainact =  new MainActivity();
+    BeaconTransmitter beaconTransmitter = new BeaconTransmitter();
 
-    public profAddday() {
+    public profAddclass() {
     }
 
-    public profAddday(Context c) {
+    public profAddclass(Context c) {
         this.context = c;
     }
 
     public String returnvalue;
 
-    public void profAddday_Asycn(final String classnum, final String addday) {
+
+
+    public void profAddclass_Asycn(final String id, final String cname, final String cnum, final String ckname) {
         (new AsyncTask<BeaconTransmitter, Void, String>() {
 
             @Override
             protected String doInBackground(BeaconTransmitter... mainActivities) {
-                profAddday.ConnectServer connectServerPost = new profAddday.ConnectServer();
-                connectServerPost.requestPost(url, classnum, addday);
+                profAddclass.ConnectServer connectServerPost = new profAddclass.ConnectServer();
+                connectServerPost.requestPost(url, id, cname, cnum, ckname);
                 return responseBody;
             }
 
@@ -56,6 +59,7 @@ public class profAddday {
 
             @Override
             protected void onPostExecute(String result){
+                    beaconTransmitter.beacontransmitter_Asycn(id);
 
             }
         }).execute();
@@ -65,12 +69,14 @@ public class profAddday {
 
     class ConnectServer {//Client 생성
 
-        public int requestPost(String url, String classnum, String addday) {
+        public int requestPost(String url, String id, String cname, String cnum, String ckname) {
 
             //Request Body에 서버에 보낼 데이터 작성
             final RequestBody requestBody = new FormBody.Builder()
-                    .add("class", classnum)
-                    .add("addDay", addday).build();
+                    .add("id", id)
+                    .add("cname", cname)
+                    .add("cnum", cnum)
+                    .add("ckname", ckname).build();
 
 
             //작성한 Request Body와 데이터를 보낼 url을 Request에 붙임
@@ -84,16 +90,10 @@ public class profAddday {
 
                 @Override
                 public void onResponse(Call call, Response response) {
-                    String msg = null;
                     try {
                         responseBody = response.body().string();
-                        if(responseBody.equals("Success"))   {
-                            msg = "생성되었습니다.";
-                        }   else    {
-                            msg = "Error :\n" + responseBody;
-                        }
                         Handler mHandler = new Handler(Looper.getMainLooper());
-                        final String finalMsg = msg;
+                        final String finalMsg = responseBody;
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {

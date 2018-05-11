@@ -43,7 +43,12 @@ public class MainActivity extends AppCompatActivity {
             // TODO: Consider calling
             return;
         }
-        String mPhoneNumber = (tMgr.getLine1Number() == "" ? tMgr.getLine1Number() : "01001010101");   // if null -> test
+        String mPhoneNumber = "01001010101";
+        mPhoneNumber = (tMgr.getLine1Number() != null || tMgr.getLine1Number() == "" ? tMgr.getLine1Number() : "01001010101");   // if null or "" -> test
+        if(mPhoneNumber.contains("+82"))  {
+            mPhoneNumber = mPhoneNumber.replace("+82", "0");
+        }
+
         Log.e("확인용", mPhoneNumber);
 
         Bs = findViewById(R.id.radio_student);

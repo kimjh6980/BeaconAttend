@@ -65,16 +65,18 @@ public class BeaconTransmitter extends AppCompatActivity {
     BeaconManager beaconManager;
     Beacon beacon;
 
-    String profidS;
+    public static String profidS;
     TextView profid;
     TextView  classtitle;
     EditText t1, t2, t3;
 
-    List<String> list;
+    public static List<String> list;
     ListView classListView;
 
     RadioButton startbtn, endbtn;
     RadioGroup attendradio;
+
+    static ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +128,7 @@ public class BeaconTransmitter extends AppCompatActivity {
         classListView =  findViewById(R.id.classListView);
         list = new ArrayList<>();
         //리스트뷰와 리스트를 연결하기 위해 사용되는 어댑터
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         //리스트뷰의 어댑터를 지정해준다.
         classListView.setAdapter(adapter);
 
@@ -199,12 +201,17 @@ public class BeaconTransmitter extends AppCompatActivity {
 
         String id2 = t1.getText().toString();
         String id3 = t2.getText().toString();
-        String temp = t3.getText().toString();
-        int dayy = Integer.valueOf(t3.getText().toString());
+        int temp;
+        if(!status) {
+            temp = 1;
+        }   else    {
+            temp = 2;
+        }
+        int dayy = Integer.valueOf(t3.getText().toString() + temp);
 
         // -----------------------------------------------------------------------------------------------------------------------Start 와 End를 구분짓는 datafield가 하나 더 필요할듯
 
-        Long[] day = {Long.valueOf(dayy)};
+        Long[] day = {Long.valueOf(dayy)};    //temp = 시작/종료, dayy = 날짜
         if (!statusbool && id2 != "" && id3 != "" ) {   // false = 꺼진상태 -> 켜야됨
             // 비콘 생성 후 시작. 실제 가장 필요한 소스
             beacon = new Beacon.Builder()
@@ -286,16 +293,20 @@ public class BeaconTransmitter extends AppCompatActivity {
     }
 
     public void AddDay(View view) {
-        //false = 시작, true = 종료
-        String classnum = t1.getText().toString() +"_"+t2.getText().toString();
-        String adddayv = t3.getText().toString();
-        if(!status) {
-            adddayv = "S"+adddayv;
+        if(t1.getText().toString() == "" || t2.getText().toString() == "")  {
+            Toast.makeText(beacontransmitterContext, "데이터를 채워주시기 바랍니다", Toast.LENGTH_SHORT).show();
         }   else    {
-            adddayv = "E"+adddayv;
+            //false = 시작, true = 종료
+            String classnum = t1.getText().toString() +"_"+t2.getText().toString();
+            String adddayv = t3.getText().toString();
+            if(!status) {
+                adddayv = "S"+adddayv;
+            }   else    {
+                adddayv = "E"+adddayv;
+            }
+            Toast.makeText(beacontransmitterContext, classnum +"/"+adddayv, Toast.LENGTH_SHORT).show();
+            addday.profAddday_Asycn(classnum, adddayv);
         }
-        Toast.makeText(beacontransmitterContext, classnum +"/"+adddayv, Toast.LENGTH_SHORT).show();
-        addday.profAddday_Asycn(classnum, adddayv);
     }
 
     //------------------------------------------
@@ -318,6 +329,7 @@ public class BeaconTransmitter extends AppCompatActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                list.clear();
             }
 
             @Override
@@ -329,6 +341,10 @@ public class BeaconTransmitter extends AppCompatActivity {
         return;
     }
 
+    public void addClass(View view) {
+        AddclassDialog dialog = new AddclassDialog(this);
+        dialog.show();
+    }
 
 
     class ConnectServer {//Client 생성
@@ -360,6 +376,13 @@ public class BeaconTransmitter extends AppCompatActivity {
                             String num = getclass.getString("class");
                             additem(name, num);
                         }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+
 
                     } catch (IOException e) {
                         e.printStackTrace();

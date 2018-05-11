@@ -139,12 +139,23 @@ public class BeaconReceive extends BaseActivity implements BeaconConsumer {
                         final int major = beacon.getId2().toInt();
                         final int minor = beacon.getId3().toInt();
                         final List<Long> datafield = beacon.getDataFields();
+                        String fulldata = String.valueOf(datafield);
+                        fulldata = fulldata.replaceAll("\\[", "");
+                        fulldata = fulldata.replaceAll("\\]", "");
+                        String daydata = fulldata.substring(0, 6);
+                        String attendstatus = fulldata.substring(6);
+                        String attendstatusString = null;
+                        if(attendstatus.equals("1"))    {   // 사작
+                            attendstatusString = "시작";
+                        }   else if(attendstatus.equals("2"))   {
+                            attendstatusString = "종료";
+                        }
+//                        Log.e("dataconvert = ", dataconvert[0] +"/"+dataconvert[1]);    // 0 = 상태, 1 = 날짜
                         Log.e("UUID =", uuid);
                         Log.e("Datafield = ", String.valueOf(datafield));
-                        //items.add(new Item(String.valueOf(major), String.valueOf(minor), String.valueOf(datafield), String.valueOf(distance)));
                         if (uuid.equals("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")) {
-                            Log.e("find", major +"/"+minor+"/"+datafield);
-                            items.add(new Item(String.valueOf(major), String.valueOf(minor), String.valueOf(datafield), String.valueOf(distance)));
+                            Log.e("find", major +"/"+minor+"/"+daydata +"/"+attendstatusString);
+                            items.add(new Item(String.valueOf(major), String.valueOf(minor), String.valueOf(daydata), attendstatusString));
                         }
                         runOnUiThread(new Runnable() {
                             @Override
