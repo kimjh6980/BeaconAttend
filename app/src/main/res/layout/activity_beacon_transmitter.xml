@@ -60,8 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="44870" />
+            android:inputType="textPersonName" />
 
         <TextView
             android:layout_width="0dp"
@@ -75,8 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="04" />
+            android:inputType="textPersonName" />
     </LinearLayout>
 
     <LinearLayout
@@ -103,8 +101,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="180502" />
+                android:inputType="textPersonName" />
         </LinearLayout>
 
         <LinearLayout

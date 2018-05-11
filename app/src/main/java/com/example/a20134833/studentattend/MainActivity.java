@@ -3,7 +3,6 @@ package com.example.a20134833.studentattend;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -19,7 +18,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText ET_id, ET_pw, ET_phone;
+    EditText ET_id, ET_pw;
+    public static EditText ET_phone;
     Button B_signup, B_signin;
     RadioButton Bs, Bp;
     RadioGroup radiogroup;
@@ -85,12 +85,8 @@ public class MainActivity extends AppCompatActivity {
         B_signup = findViewById(R.id.B_SignUP);
         B_signup.setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
-                                            Intent BdataIntent = new Intent(MainActContext.getApplicationContext(), BeaconReceive.class);
-                                            BdataIntent.putExtra("id", "guest");
-                                            BdataIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            MainActivity mainact = (MainActivity)MainActivity.MainAct;
-                                            MainActContext.startActivity(BdataIntent);
-                                            mainact.finish();
+                                            SignUpDialog dialog = new SignUpDialog(MainActivity.this);
+                                            dialog.show();
                                         }
                                     }
         );

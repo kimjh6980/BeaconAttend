@@ -15,7 +15,7 @@
         android:paddingBottom="16dp"
         android:paddingLeft="24dp"
         android:paddingTop="16dp"
-        android:text="수업 추가"
+        android:text="회원가입"
         android:textColor="#000"
         android:textSize="20sp" />
 
@@ -24,18 +24,26 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="접속 ID : " />
+        <RadioGroup
+            android:id="@+id/UpRadioG"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/addclassdialogid"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            <RadioButton
+                android:id="@+id/UpStudent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="학생회원" />
+
+            <RadioButton
+                android:id="@+id/UpProf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="교수회원" />
+        </RadioGroup>
     </LinearLayout>
 
     <LinearLayout
@@ -54,16 +62,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="교과번호" />
+                android:text="ID" />
 
             <EditText
-                android:id="@+id/addclassnum"
+                android:id="@+id/UpID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="교과번호(숫자만)"
-                android:inputType="number" />
+                android:hint="ID를 입력해주세요"
+                android:inputType="number"/>
         </LinearLayout>
 
         <LinearLayout
@@ -76,16 +84,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="분반번호" />
+                android:text="PW" />
 
             <EditText
-                android:id="@+id/addclassnum2"
+                android:id="@+id/UpPW"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="분반번호(숫자만)"
-                android:inputType="number" />
+                android:hint="비밀번호를 입력해주세요"
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
@@ -97,16 +105,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="수업명" />
+                android:text="PhoneNum" />
 
             <EditText
-                android:id="@+id/addclassname"
+                android:id="@+id/UpPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="수업명(한글)"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:text="Name" />
         </LinearLayout>
 
     </LinearLayout>
@@ -133,7 +141,7 @@
         android:weightSum="10">
 
         <TextView
-            android:id="@+id/addclassDialogCancel"
+            android:id="@+id/UpCancel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -145,14 +153,14 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/addclassDialogOK"
+            android:id="@+id/UpOK"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:gravity="center"
-            android:text="추가"
+            android:text="가입하기"
             android:textColor="@color/colorAccent"
             android:textSize="16sp" />
     </LinearLayout>
